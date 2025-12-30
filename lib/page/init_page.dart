@@ -3,6 +3,7 @@ import 'package:tsr_monitoring_app/widget/equ_card_one_socket_one_chart.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import '../util/constants.dart';
+import '../util/unique_shared_preference.dart';
 import '../widget/anomaly_list_view.dart';
 import '../widget/equ_card_one_socket_two_chart.dart';
 import '../widget/equ_card_two_socket_two_chart.dart';
@@ -13,27 +14,61 @@ class InitPage extends StatelessWidget {
   Widget build(BuildContext context) {
     double curWidth = MediaQuery.of(context).size.width;
     double curHeight = MediaQuery.of(context).size.height;
-    return _body(curWidth, curHeight, machineList);
+    final visibleMachines = _getVisibleMachineList();
+    return _body(curWidth, curHeight, visibleMachines);
   }
 }
 
-List<Widget> _buildMachineCards(double curWidth, double curHeight, List machineList) {
-  if (machineList.length == 1) {
-    return [
-      EquCardOSTC(machineList[0], SHOT_BLAST1_CHANNEL_NAME, SHOT_BLAST2_CHANNEL_NAME, curWidth, curHeight),
-    ];
+List<Widget> _buildMachineCards(double curWidth, double curHeight, List<String> machineList) {
+  final List<Widget> cards = [];
+  for (final machineName in machineList) {
+    final Widget? card = _buildMachineCard(machineName, curWidth, curHeight);
+    if (card != null) {
+      cards.add(card);
+    }
   }
-  return [
-    EquCardOSTC(machineList[0], SHOT_BLAST1_CHANNEL_NAME, SHOT_BLAST2_CHANNEL_NAME, curWidth, curHeight),
-    EquCardOSTC(machineList[1], ARO_PUMP1_CHANNEL_NAME, ARO_PUMP2_CHANNEL_NAME, curWidth, curHeight),
-    EquCardOSOC(machineList[2], DISPENSING_MACHINE_CHANNEL_NAME, curWidth, curHeight),
-    EquCardTSTC(machineList[3], VACUUM_PUMP1_CHANNEL_NAME, VACUUM_PUMP2_CHANNEL_NAME, curWidth, curHeight),
-  ];
+  return cards;
 }
 
-Widget _body(double curWidth, double curHeight, List machineList) {
+Widget? _buildMachineCard(String machineName, double curWidth, double curHeight) {
+  switch (machineName) {
+    case SHOT_BLAST:
+      return EquCardOSTC(machineName, SHOT_BLAST1_CHANNEL_NAME, SHOT_BLAST2_CHANNEL_NAME, curWidth, curHeight);
+    case ARO_PUMP:
+      return EquCardOSTC(machineName, ARO_PUMP1_CHANNEL_NAME, ARO_PUMP2_CHANNEL_NAME, curWidth, curHeight);
+    case DISPENSING_MACHINE:
+      return EquCardOSOC(machineName, DISPENSING_MACHINE_CHANNEL_NAME, curWidth, curHeight);
+    case VACUUM_PUMP:
+      return EquCardTSTC(machineName, VACUUM_PUMP1_CHANNEL_NAME, VACUUM_PUMP2_CHANNEL_NAME, curWidth, curHeight);
+    default:
+      return null;
+  }
+}
+
+
+List<String> _getVisibleMachineList() {
+  final List<String> allMachines = List<String>.from(machineList);
+  final saved = UniqueSharedPreference.getStringList('selectedMachines', allMachines);
+  if (saved.isEmpty) {
+    return allMachines;
+  }
+  final selectedSet = saved.toSet();
+  final List<String> ordered = [];
+  for (final machineName in allMachines) {
+    if (selectedSet.contains(machineName)) {
+      ordered.add(machineName);
+    }
+  }
+  return ordered;
+}
+
+
+Widget _body(double curWidth, double curHeight, List<String> machineList) {
   if(curWidth >= 768) {
     final machineCards = _buildMachineCards(curWidth, curHeight, machineList);
+    final machineContent = machineCards.isEmpty
+        ? [Center(child: Text("표시할 장비가 없습니다."))]
+        : machineCards;
     return FractionallySizedBox(
       widthFactor: 1,
       heightFactor: 1,
@@ -80,9 +115,7 @@ Widget _body(double curWidth, double curHeight, List machineList) {
           Container(
             width: curWidth * 0.6,
             child: Column(
-              children: [
-                ...machineCards,
-              ]
+              children: machineContent
             )
           ),
           Container(
@@ -105,6 +138,9 @@ Widget _body(double curWidth, double curHeight, List machineList) {
     );*/
   } else {
     final machineCards = _buildMachineCards(curWidth, curHeight, machineList);
+    if (machineCards.isEmpty) {
+      return Center(child: Text("표시할 장비가 없습니다."));
+    }
     return GridView.count(
         crossAxisCount: 1,
         childAspectRatio: (curWidth/2) / (curHeight/4),

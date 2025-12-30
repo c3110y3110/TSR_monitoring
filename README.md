@@ -34,7 +34,7 @@ cd C:\path\to\tsr_monitoring_app-master
 flutter doctor
 flutter doctor --android-licenses
 flutter pub get
-flutter run
+flutter run                                 # 해당 내용은 실행할 때만 적용
 flutter build apk --release
 ```
 결과물: `build/app/outputs/flutter-apk/app-release.apk`
@@ -57,9 +57,10 @@ const VACUUM_PUMP2_URL = "/sio/VacuumPump2";
 ```
 2) 그래프 Y축 기본 범위
    - `lib/util/unique_shared_preference.dart`
+   - 해당 내용은 수정안해도 됨. (2차 수정으로 값에 따른 유동적 변화로 빌드)
 ```dart
-setString('maxvalue', '0.04'); // 최댓값
-setString('minvalue', '0.0'); // 최솟값
+setString('maxvalue', '1.0'); // 최댓값
+setString('minvalue', '-1.0'); // 최솟값
 ```
 
 ## 참고

@@ -8,8 +8,11 @@ class UniqueSharedPreference {
     _instance = await SharedPreferences.getInstance();
     setString('selectedIndex', '0');
     setString('selectedUnit', avgList[0]);
-    setString('maxvalue', '1.0');
-    setString('minvalue', '-1.0');
+    setString('maxvalue', '10.0');
+    setString('minvalue', '-10.0');
+    if (!_instance.containsKey('selectedMachines')) {
+      setStringList('selectedMachines', List<String>.from(machineList));
+    }
   }
 
   static String getString(String key, [String? defValue]) {
@@ -19,6 +22,16 @@ class UniqueSharedPreference {
   static void setString(String key, String value) async {
     var prefs = await _instance;
     prefs.setString(key, value);
+    await prefs.commit();
+  }
+
+  static List<String> getStringList(String key, [List<String>? defValue]) {
+    return _instance.getStringList(key) ?? defValue ?? <String>[];
+  }
+
+  static void setStringList(String key, List<String> value) async {
+    var prefs = await _instance;
+    prefs.setStringList(key, value);
     await prefs.commit();
   }
 }

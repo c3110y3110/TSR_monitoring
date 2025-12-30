@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "575844294207",
+    "project_id": "tsr-monitoring-app",
+    "storage_bucket": "tsr-monitoring-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:575844294207:android:c83a0987662c8cb5dd228a",
+        "android_client_info": {
+          "package_name": "com.example.tsr_monitoring_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "575844294207-39410er8dhnm0g6l7v5u7h5pnkghgrqe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6sipM6apzAbIyfqZrSMLx7yYuXz1ylgw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "575844294207-39410er8dhnm0g6l7v5u7h5pnkghgrqe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

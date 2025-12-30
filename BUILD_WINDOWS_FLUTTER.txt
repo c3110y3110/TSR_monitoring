@@ -1,0 +1,96 @@
+TSR Monitoring App (Flutter) - Windows Build Notes
+
+[빌드 방법]
+cd C:\path\to\tsr_monitoring_app-master   //zip 파일을 github에서 받고 터미널에서 루트 경로 들어가기
+flutter doctor
+flutter doctor --android-licenses
+flutter pub get                           //의존성 다운로드
+flutter build apk --release               //실제 빌드
+
+
+Requirements (Windows)
+- Flutter SDK: >=3.0.6 <4.0.0 (pubspec.yaml)
+- Dart: bundled with Flutter
+- Android SDK + platform tools
+- Android Gradle Plugin: 8.3.2 (android/settings.gradle)
+- Kotlin Gradle Plugin: 1.9.24 (android/settings.gradle)
+- JDK 17 (recommended for AGP 8.x)
+- VS Code + Dart + Flutter extensions
+
+Project dependencies (direct)
+- flutter (sdk)
+- cupertino_icons ^1.0.2
+- syncfusion_flutter_charts ^32.1.20
+- socket_io_client ^2.0.3+1
+- http ^1.1.0
+- firebase_core ^2.15.1
+- firebase_messaging ^14.6.7
+- flutter_local_notifications ^19.5.0
+- flutter_localization ^0.1.13
+- shared_preferences ^2.5.4
+
+Dev:
+- flutter_test (sdk)
+- flutter_lints ^2.0.0
+Overrides:
+- win32 ^5.15.0
+Exact resolved versions: pubspec.lock
+
+Key files
+- pubspec.yaml / pubspec.lock
+- android/settings.gradle (AGP/Kotlin versions)
+- android/app/build.gradle (coreLibraryDesugaring 2.1.4)
+- lib/util/constants.dart (BASE_URL, socket namespaces, channel mapping)
+- lib/util/unique_shared_preference.dart (default chart min/max)
+- android/app/google-services.json (Firebase)
+
+Android Studio 설치 및 추가 구성
+- Android Studio 설치 후 SDK Manager에서 아래 구성요소 설치
+  - Android SDK Platform (34)
+  - Android SDK Platform-Tools
+  - Android SDK Build-Tools
+  - Android SDK Command-line Tools (latest)
+- 에뮬레이터가 필요하면 Android Emulator와 시스템 이미지 추가 설치
+
+VS Code 빌드 단계 (Windows)
+1) Flutter SDK 설치 후 <flutter>\bin 을 PATH에 추가
+2) Android Studio 또는 standalone SDK 설치
+   - ANDROID_SDK_ROOT 설정
+   - 라이선스 승인: flutter doctor --android-licenses
+3) VS Code 확장 설치: Dart, Flutter
+4) VS Code에서 프로젝트 폴더 열기
+5) 터미널에서 실행:
+   - flutter doctor
+   - flutter pub get
+6) 디버그 실행(기기/에뮬레이터):
+   - flutter run
+7) 릴리즈 APK 빌드:
+   - flutter build apk --release
+   출력: build\app\outputs\flutter-apk\app-release.apk
+
+[파일-머신 매핑] - 아래 [코드 파일 수정] 참고
+해당 파일은 
+쇼트블라스트: 1R_bearing_5
+인산염피막기: AROPump
+비형상도포기: Dispenser
+진공펌프: 각각 VacuumPump1, VacuumPump2
+
+[코드 파일 수정]
+1. Ip(vpn 값에 맞게, 현재는 맞춤) 및 파일-머신 매핑 코드(만약에 수정할 시)
+   - lib/util/constants.dart (sio/(여기 값 수정))
+     const SHOT_BLAST_URL = "/sio/1R_bearing_5";
+     const ARO_PUMP_URL = "/sio/AROPump";
+     const DISPENSING_MACHINE_URL = "/sio/Dispenser";
+     const VACUUM_PUMP1_URL = "/sio/VacuumPump1";
+     const VACUUM_PUMP2_URL = "/sio/VacuumPump2";
+2. 그래프 표현 최댓값, 최솟값 수정
+   - lib/util/unique_shared_preference.dart 파일
+     setString('maxvalue', '0.04'); // 최댓값
+     setString('minvalue', '0.0'); // 최솟값
+
+Notes / common fixes
+- If BASE_URL uses http://, you may need cleartext traffic enabled in AndroidManifest.
+- If build warns about AGP/Kotlin versions, update android/settings.gradle or use
+  --android-skip-build-dependency-validation.
+- For Firebase, ensure android/app/google-services.json is present.
+ - 지금 서버는 1분 평균값만 소켓으로 전송하므로(진동 원시 파형이 아님) Hz를 올려도 앱에 들어오는 값은 거의 변함이 없음.

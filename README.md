@@ -27,10 +27,9 @@ Socket.IO 서버에 연결해 차트를 표시하고, 평균/이상 이력을 �
 ## 설정 위치
 - API Base URL 및 Socket.IO 네임스페이스: `lib/util/constants.dart`
 - 그래프 기본 축 범위: `lib/util/unique_shared_preference.dart`
-- Firebase 설정: `android/app/google-services.json`
-
+- Firebase 설정: `android/app/google-services.json` - 현재는 건들지 말아야함
 ## 빌드/실행 (Windows)
-```powershell
+```powershell, terminor 등 동일
 cd C:\path\to\tsr_monitoring_app-master
 flutter doctor
 flutter doctor --android-licenses
@@ -66,21 +65,5 @@ setString('minvalue', '0.0'); // 최솟값
 ## 참고
 - `BASE_URL`이 `http://`인 경우 Android 9+에서 cleartext 허용이 필요할 수 있습니다.
 - Socket.IO 네임스페이스는 서버 `/sio/machineList` 결과와 일치해야 합니다.
-- Windows 상세 단계와 매핑 정보는 `BUILD_WINDOWS_FLUTTER.txt` 참고.
- - 지금 서버는 1분 평균값만 소켓으로 전송하므로(진동 원시 파형이 아님) Hz를 올려도 앱에 들어오는 값은 거의 변함이 없음.
+- 지금 서버는 1분 평균값만 소켓으로 전송하므로(진동 원시 파형이 아님) Hz를 올려도 앱에 들어오는 값은 거의 변함이 없음.
 
-## GitHub 업로드
-1) Git 초기화 및 커밋
-```bash
-git init
-git add .
-git commit -m "Initial commit"
-```
-2) GitHub에서 새 저장소 생성 (URL 복사)
-3) 리모트 추가 및 푸시
-```bash
-git remote add origin https://github.com/<user>/<repo>.git
-git branch -M main
-git push -u origin main
-```
-참고: `android/app/google-services.json` 등 민감 파일이 있다면 공개 저장소 업로드 전 확인하세요.

@@ -3,13 +3,41 @@ import 'package:tsr_monitoring_app/widget/equ_card_one_socket_one_chart.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import '../util/constants.dart';
+import '../util/route_observer.dart';
 import '../util/unique_shared_preference.dart';
 import '../widget/anomaly_list_view.dart';
 import '../widget/equ_card_one_socket_two_chart.dart';
 import '../widget/equ_card_two_socket_two_chart.dart';
 
 
-class InitPage extends StatelessWidget {
+class InitPage extends StatefulWidget {
+  @override
+  State<InitPage> createState() => _InitPageState();
+}
+
+class _InitPageState extends State<InitPage> with RouteAware {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final route = ModalRoute.of(context);
+    if (route is PageRoute) {
+      routeObserver.subscribe(this, route);
+    }
+  }
+
+  @override
+  void didPopNext() {
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  @override
+  void dispose() {
+    routeObserver.unsubscribe(this);
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     double curWidth = MediaQuery.of(context).size.width;

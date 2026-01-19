@@ -24,7 +24,7 @@ Monitoring Server의 REST/Socket.IO를 사용해 실시간 차트, 평균 통계
 
 ## 설정 위치
 - REST Base URL 및 Socket.IO 네임스페이스: `lib/util/constants.dart`
-- 실시간 차트 Y축 기본 범위: `lib/util/unique_shared_preference.dart`
+- 실시간 차트 Y축 기본/대체 범위: `lib/util/unique_shared_preference.dart`
 - Firebase 설정:
   - `android/app/google-services.json` (수정 금지)
   - `lib/firebase_options.dart`
@@ -66,18 +66,17 @@ const DISPENSING_MACHINE_URL = "/sio/Dispenser";
 const VACUUM_PUMP1_URL = "/sio/VacuumPump1";
 const VACUUM_PUMP2_URL = "/sio/VacuumPump2";
 ```
-2) 차트 Y축 기본 범위
+2) 차트 Y축 기본/대체 범위
    - `lib/util/unique_shared_preference.dart`
-   - 필요 시 값 조정(현재 기본값은 코드 내 `maxvalue/minvalue`)
+   - 실제 Y축은 수신 데이터 기준 자동 스케일
+   - 데이터가 없거나 평탄한 경우, 아래 설정값이 fallback으로 사용됨
 ```dart
 setString('maxvalue', '10.0'); // 최댓값
 setString('minvalue', '-10.0'); // 최솟값
 ```
 
 
-## 동작 메모
-- 실시간 차트 Y축은 수신 데이터 기준으로 자동 스케일
-- 설정의 `maxvalue/minvalue`는 데이터가 없거나 평탄할 때 기본 범위로 사용
+## 설정 동작
 - 설정에서 표시 장비는 최소 1개 선택(빈 화면/탭 방지)
 - 설정 변경 후 홈 화면은 자동 갱신(RouteAware)
 

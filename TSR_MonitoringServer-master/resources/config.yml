@@ -1,0 +1,24 @@
+SERVER:
+  HOST: '0.0.0.0'
+  PORT: 8080
+  TCP_PORT: 8082
+  CORS_ORIGINS: ['*']
+
+FCM:
+  CRED_PATH: resources/tsr-monitoring-app-c08931e07d1a.json
+  TIMEOUT: 120
+
+LOGGER:
+  PATH: 'log'
+
+# ABS   : 절대값
+# REAL  : 실제값
+STAT:
+  VIB: ABS
+  TEMP: REAL
+
+DATABASE:
+  PATH: 'db'
+
+DATA:
+  PATH: 'data'

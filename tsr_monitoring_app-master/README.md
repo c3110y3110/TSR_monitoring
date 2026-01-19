@@ -74,6 +74,13 @@ setString('maxvalue', '10.0'); // 최댓값
 setString('minvalue', '-10.0'); // 최솟값
 ```
 
+
+## 동작 메모
+- 실시간 차트 Y축은 수신 데이터 기준으로 자동 스케일
+- 설정의 `maxvalue/minvalue`는 데이터가 없거나 평탄할 때 기본 범위로 사용
+- 설정에서 표시 장비는 최소 1개 선택(빈 화면/탭 방지)
+- 설정 변경 후 홈 화면은 자동 갱신(RouteAware)
+
 ## 참고
 - `BASE_URL`이 `http://`인 경우 Android 9+에서 cleartext 허용 필요
 - Socket.IO 네임스페이스는 서버 `/sio/machineList` 결과와 일치해야 함

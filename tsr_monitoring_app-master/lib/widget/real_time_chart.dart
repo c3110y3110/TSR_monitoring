@@ -101,7 +101,7 @@ class _LiveChart extends State<LiveChart> {
     } else {
       itemHeight = curHeight * 0.35;
     }
-    // 사용자 설정된 Y축 범위를 적용
+    // 설정값은 기본 범위로 사용하고, 실제 스케일은 수신 데이터로 자동 계산
     double maxvalue = double.parse(UniqueSharedPreference.getString('maxvalue'));
     double minvalue = double.parse(UniqueSharedPreference.getString('minvalue'));
     if (minvalue > maxvalue) {
@@ -151,6 +151,7 @@ class _LiveChart extends State<LiveChart> {
 
 
   _AxisRange _getAxisRange(double fallbackMin, double fallbackMax) {
+    // 데이터가 있으면 자동 스케일, 없으면 설정값(fallback) 사용
     if (chartData.isEmpty) {
       return _AxisRange(fallbackMin, fallbackMax);
     }

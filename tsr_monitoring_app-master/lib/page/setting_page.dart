@@ -117,6 +117,7 @@ class _SettingPage extends State<SettingPage> {
 
   void _saveValue() {
     // 입력값 검증 후 로컬 설정 저장
+    // 최소 1개 장비 선택을 강제해 홈 화면 탭이 비는 것을 방지
     if (_selectedMachines.isEmpty) {
       showDialog(
           context: context,

@@ -84,6 +84,7 @@ List<String> _getVisibleMachineList() {
   // 사용자 설정에 따라 홈 화면 노출 머신 결정
   final List<String> allMachines = List<String>.from(machineList);
   final saved = UniqueSharedPreference.getStringList('selectedMachines', allMachines);
+  // 저장값이 비어 있으면 기본 전체 목록 유지
   if (saved.isEmpty) {
     return allMachines;
   }

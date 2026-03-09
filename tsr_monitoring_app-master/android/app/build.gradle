@@ -17,7 +17,7 @@ def flutterVersionName = localProperties.getProperty("flutter.versionName") ?: "
 
 android {
     namespace "com.example.tsr_monitoring_app"
-    compileSdk flutter.compileSdkVersion
+    compileSdk 36
     ndkVersion flutter.ndkVersion
 
 
@@ -34,9 +34,9 @@ android {
     defaultConfig {
         applicationId "com.example.tsr_monitoring_app"
 
-        // minSdk를 21로 강제했으니 그대로 유지
-        minSdkVersion flutter.minSdkVersion
-        targetSdk flutter.targetSdkVersion
+        // Pin SDK levels for reproducible local setup on the current dependency set.
+        minSdkVersion 24
+        targetSdk 36
 
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
